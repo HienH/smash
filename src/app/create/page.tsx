@@ -2,12 +2,10 @@
 import { Button } from '@/components/ui/button';
 import React from 'react';
 export default async function create() {
-  // redirct to home page
   const authSpotify = async () => {
     const response = await fetch('/api/authWithSpotify');
-
-    console.log('called auth with spotify');
-    return;
+    const data = await response.json();
+    window.location.href = data.redirect;
   };
 
   return (
