@@ -5,3 +5,6 @@ export const Home = () => {
     </>
   );
 };
+
+// on init of home; query spotify api users current favourite songs (based of plays)
+// display list of favourite tracks
