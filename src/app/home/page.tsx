@@ -15,7 +15,13 @@ const Home = () => {
   );
 };
 
-// on init of home; query spotify api users current favourite songs (based of plays)
+// get access code from query
+// store code as cookie
+// if cookie exist call getFavTrack else redirect/create
+//
+
+// getFavTrack()
+///query spotify api users current favourite songs (based of plays)
 // useQuery on access code??
 // display list of favourite tracks
 
