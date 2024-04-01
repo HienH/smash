@@ -30,11 +30,8 @@ const Home = () => {
   );
 };
 
-// store code as cookie
-// if cookie exist call getFavTrack else redirect/create
-//
-
-// getFavTrack()
+// get access token
+// use access token to getFavTrack()
 ///query spotify api users current favourite songs (based of plays)
 // useQuery on access code??
 // display list of favourite tracks
