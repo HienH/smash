@@ -1,10 +1,11 @@
+import { getFavouriteSong } from '@/app/services/getFavouriteSong';
+import { getUserId } from '@/app/services/getUserId';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest, res: NextResponse) {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_SECRET_ID;
   const redirect = process.env.SPOTIFY_REDIRECT;
-  const scope = 'user-top-read%20playlist-modify-private';
   const accessCode = await req.json();
 
   const encodeHeader = Buffer.from(clientId + ':' + clientSecret).toString(
@@ -28,9 +29,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
   console.log('this is spotifyAccessCode');
   console.log(spotifyAccessToken);
 
-  const { access_token, refresh_token } = spotifyAccessToken;
+  const { access_token, refresh_token, expires_in } = spotifyAccessToken;
+  console.log(access_token);
 
-  //Store accessToken, refresh_token
-
+  if (access_token) {
+    const favSong = getFavouriteSong(access_token);
+    const userId = getUserId(access_token);
+  }
   return NextResponse.json({ success: true });
 }
+
+//TODO get refresh token when access token is expires_in - in seconds which access is valid
+const getRefreshToken = () => {};
