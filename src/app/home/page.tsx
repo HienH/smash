@@ -1,13 +1,28 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { redirect, useSearchParams } from 'next/navigation';
 import React from 'react';
 const Home = () => {
-  const pathname = usePathname();
-  console.log(pathname);
+  const searchParams = useSearchParams().get('code');
 
-  console.log('homeQuerycalled');
+  const getFavouriteSongs = async (authKey: string) => {
+    const option = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(authKey),
+    };
+    const response = await fetch('/api/myFavouriteSongs', option);
+    const favouriteSongs = await response.json();
+    console.log(favouriteSongs);
+  };
 
+  if (searchParams) {
+    getFavouriteSongs(searchParams);
+  } else {
+    redirect('/create');
+  }
   return (
     <>
       <p>Congratulation you are authenticated with spotify</p>
@@ -15,7 +30,6 @@ const Home = () => {
   );
 };
 
-// get access code from query
 // store code as cookie
 // if cookie exist call getFavTrack else redirect/create
 //
