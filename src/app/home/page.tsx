@@ -1,11 +1,21 @@
 'use client';
 
 import { redirect, useSearchParams } from 'next/navigation';
-import React from 'react';
-const Home = () => {
-  const searchParams = useSearchParams().get('code');
+import React, { useEffect, useState } from 'react';
 
-  const getFavouriteSongs = async (authKey: string) => {
+const Home = () => {
+  const [favSongs, setFavSongs] = useState();
+  const code = useSearchParams().get('code');
+
+  useEffect(() => {
+    if (code) {
+      callSpotifyApi(code);
+    } else {
+      redirect('/create');
+    }
+  }, [code]);
+
+  const callSpotifyApi = async (authKey: string) => {
     const option = {
       method: 'POST',
       headers: {
@@ -13,26 +23,31 @@ const Home = () => {
       },
       body: JSON.stringify(authKey),
     };
-    const response = await fetch('/api/myFavouriteSongs', option);
-    const favouriteSongs = await response.json();
-    console.log(favouriteSongs);
+
+    const response = await fetch('/api/callSpotifyApi', option);
+    const data = await response.json();
+    const { userId, songs } = data;
+    setFavSongs(songs);
   };
 
-  if (searchParams) {
-    getFavouriteSongs(searchParams);
-  } else {
-    redirect('/create');
-  }
   return (
     <>
       <p>Congratulation you are authenticated with spotify</p>
+
+      {favSongs && (
+        <>
+          <h2>Your Favourite Songs</h2>
+          <ul>
+            {favSongs.map((song) => (
+              <li>{song.name}</li>
+            ))}
+          </ul>
+        </>
+      )}
     </>
   );
 };
 
-// get access token
-// use access token to getFavTrack()
-///query spotify api users current favourite songs (based of plays)
 // useQuery on access code??
 // display list of favourite tracks
 

@@ -1,4 +1,5 @@
-import { getFavouriteSong } from '@/app/services/getFavouriteSong';
+import { formatSong } from '@/app/helpers/formatSong';
+import { getFavouriteSongs } from '@/app/services/getFavouriteSongs';
 import { getUserId } from '@/app/services/getUserId';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -26,17 +27,22 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   const getSpotifyAccessToken = await fetch(URL, options);
   const spotifyAccessToken = await getSpotifyAccessToken.json();
-  console.log('this is spotifyAccessCode');
-  console.log(spotifyAccessToken);
-
   const { access_token, refresh_token, expires_in } = spotifyAccessToken;
-  console.log(access_token);
 
   if (access_token) {
-    const favSong = getFavouriteSong(access_token);
-    const userId = getUserId(access_token);
+    const favSongs = await getFavouriteSongs(access_token);
+    const songs = favSongs.items.map((song) => formatSong(song));
+    const userId = await getUserId(access_token);
+
+    console.log('this is working ');
+    console.log(userId);
+    return NextResponse.json({ songs, userId }, { status: 200 });
   }
-  return NextResponse.json({ success: true });
+
+  return NextResponse.json(
+    { error: 'failed to call spotify api' },
+    { status: 500 },
+  );
 }
 
 //TODO get refresh token when access token is expires_in - in seconds which access is valid
