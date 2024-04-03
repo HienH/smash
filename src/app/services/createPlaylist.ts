@@ -29,7 +29,7 @@ export const CreatePlaylist = async (accessToken: string, userId: string) => {
     }
 
     return playlistId;
-  } catch {
-    console.log('error in creating playlist');
+  } catch (error) {
+    console.log('error in creating playlist', error);
   }
 };
