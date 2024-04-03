@@ -33,9 +33,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const favSongs = await getFavouriteSongs(access_token);
     const songs = favSongs.items.map((song) => formatSong(song));
     const userId = await getUserId(access_token);
-
-    console.log('this is working ');
-    console.log(userId);
     return NextResponse.json({ songs, userId }, { status: 200 });
   }
 
