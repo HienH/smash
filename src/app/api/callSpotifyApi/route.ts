@@ -1,4 +1,6 @@
-import { formatSong } from '@/app/helpers/formatSong';
+import { ISong, formatSong } from '@/app/helpers/formatSong';
+import { addSongsToPlaylist } from '@/app/services/addSongsToPlaylist';
+import { createPlaylist } from '@/app/services/createPlaylist';
 import { getFavouriteSongs } from '@/app/services/getFavouriteSongs';
 import { getUserId } from '@/app/services/getUserId';
 import { NextRequest, NextResponse } from 'next/server';
@@ -30,10 +32,27 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const { access_token, refresh_token, expires_in } = spotifyAccessToken;
 
   if (access_token) {
+    console.log(access_token);
     const favSongs = await getFavouriteSongs(access_token);
-    const songs = favSongs.items.map((song) => formatSong(song));
+    const songs: ISong[] = favSongs.items.map((song) => formatSong(song));
     const userId = await getUserId(access_token);
-    return NextResponse.json({ songs, userId }, { status: 200 });
+
+    if (userId) {
+      const smashPlaylistId = await createPlaylist(access_token, userId);
+      console.log(smashPlaylistId);
+
+      if (smashPlaylistId) {
+        const songsUri = songs.map((song) => song.uri);
+        const addToPlaylist = await addSongsToPlaylist(
+          smashPlaylistId,
+          songsUri,
+          access_token,
+        );
+        console.log(addToPlaylist);
+      }
+    }
+
+    return NextResponse.json({ songs }, { status: 200 });
   }
 
   return NextResponse.json(

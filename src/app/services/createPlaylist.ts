@@ -1,4 +1,4 @@
-export const CreatePlaylist = async (accessToken: string, userId: string) => {
+export const createPlaylist = async (accessToken: string, userId: string) => {
   const URL = `https://api.spotify.com/v1/users/${userId}/playlists`;
 
   const header = {
