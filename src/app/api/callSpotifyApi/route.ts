@@ -32,14 +32,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const { access_token, refresh_token, expires_in } = spotifyAccessToken;
 
   if (access_token) {
-    console.log(access_token);
     const favSongs = await getFavouriteSongs(access_token);
     const songs: ISong[] = favSongs.items.map((song) => formatSong(song));
     const userId = await getUserId(access_token);
 
     if (userId) {
       const smashPlaylistId = await createPlaylist(access_token, userId);
-      console.log(smashPlaylistId);
 
       if (smashPlaylistId) {
         const songsUri = songs.map((song) => song.uri);
@@ -48,7 +46,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
           songsUri,
           access_token,
         );
-        console.log(addToPlaylist);
       }
     }
 
