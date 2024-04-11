@@ -1,17 +1,33 @@
-export const getUserId = async (accessToken: string) => {
-  const URL = 'https://api.spotify.com/v1/me';
-  const header = {
-    Authorization: `Bearer ${accessToken}`,
-  };
+import { cookies } from 'next/headers';
 
-  const options = {
-    method: 'GET',
-    headers: header,
-  };
+export const getUserId = async () => {
+  try {
+    const spotifyAccessToken = cookies().get('spotifyAccessToken');
 
-  const req = await fetch(URL, options);
-  const userInfo = await req.json();
-  const { id } = userInfo;
+    if (!spotifyAccessToken) {
+      throw new Error('Missing Access Token ');
+    }
+    const URL = 'https://api.spotify.com/v1/me';
+    const header = {
+      Authorization: `Bearer ${spotifyAccessToken.value}`,
+    };
 
-  return id;
+    const options = {
+      method: 'GET',
+      headers: header,
+    };
+
+    const req = await fetch(URL, options);
+    if (!req.ok) {
+      throw new Error('Failed to get userId');
+    }
+
+    const userInfo = await req.json();
+    const { id } = userInfo;
+
+    return id;
+  } catch (error) {
+    console.error('Error getting userId ', error);
+    throw error;
+  }
 };
