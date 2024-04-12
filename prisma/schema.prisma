@@ -14,12 +14,12 @@ datasource db {
 }
 
 model Song {
-  id     String   @id @unique @default(uuid())
-  name   String
-  uri    String
-  artist String[]
-  User   User?    @relation(fields: [userId], references: [id])
-  userId String?
+  id      String   @id @unique @default(uuid())
+  name    String
+  uri     String
+  artists String[]
+  user    User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String?
 
   @@index([userId])
 }
