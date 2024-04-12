@@ -26,6 +26,7 @@ model Song {
 
 model User {
   id             String @id @unique @default(uuid())
+  name           String
   playlistId     String
   refreshToken   String
   spotifyId      String
