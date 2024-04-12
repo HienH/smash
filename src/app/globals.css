@@ -74,3 +74,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+.title {
+  text-align: center;
+  font-size: 3rem;
+}
