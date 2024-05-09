@@ -75,6 +75,18 @@ export async function POST(req: NextRequest, res: NextResponse) {
       );
     }
 
+    // const data = {
+    //   playlistId: smashPlaylistId,
+    //   refreshToken: refresh_token,
+    //   spotifyId: userId,
+    // };
+
+    // const createUser = await fetch('/api/createUser', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(data),
+    // });
+
     return NextResponse.json({ songs }, { status: 200 });
   } catch (error) {
     console.error('spotify api error', error);
