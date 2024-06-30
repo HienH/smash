@@ -41,7 +41,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     if (!access_token) {
       return NextResponse.json(
-        { error: 'Failed to get Spotify access token' },
+        { error: 'Failed to authenticate with Spotify - access token missing' },
         { status: 500 },
       );
     }
@@ -60,12 +60,13 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     if (!smashPlaylistId) {
       return NextResponse.json(
-        { error: 'Failed to create playlist' },
+        { error: 'Failed to create playlist on spotify' },
         { status: 500 },
       );
     }
 
     const songsUri = songs.map((song) => song.uri);
+    // Adding song song to playlist created
     const addToPlaylist = await addSongsToPlaylist(smashPlaylistId, songsUri);
 
     if (!addToPlaylist) {

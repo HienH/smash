@@ -9,7 +9,7 @@ export const getFavouriteSongs = async () => {
     }
 
     const timeRange = 'short_term';
-    const limit = 40;
+    const limit = 10;
     const URL = `https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=${limit}`;
     const header = {
       Authorization: `Bearer ${spotifyAccessToken.value}`,

@@ -5,7 +5,7 @@ export const getUserId = async () => {
     const spotifyAccessToken = cookies().get('spotifyAccessToken');
 
     if (!spotifyAccessToken) {
-      throw new Error('Missing Access Token ');
+      throw new Error('Missing Access Token');
     }
     const URL = 'https://api.spotify.com/v1/me';
     const header = {
