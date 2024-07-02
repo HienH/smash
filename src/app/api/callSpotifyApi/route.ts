@@ -1,8 +1,8 @@
 import { ISong, formatSong } from '@/app/helpers/formatSong';
 import { addSongsToPlaylist } from '@/app/services/addSongsToPlaylist';
-import { createPlaylist } from '@/app/services/createPlaylist';
+import { createSpotifyPlaylist } from '@/app/services/createSpotifyPlaylist';
 import { getFavouriteSongs } from '@/app/services/getFavouriteSongs';
-import { getUserId } from '@/app/services/getUserId';
+import { getUserSpotifyId } from '@/app/services/getUserSpotifyId';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
 
     const favSongs = await getFavouriteSongs();
-    const userId = await getUserId();
+    const { id: userId, display_name } = await getUserSpotifyId();
     const songs: ISong[] = favSongs.items.map((song) => formatSong(song));
 
     if (!userId) {
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         { status: 500 },
       );
     }
-    const smashPlaylistId = await createPlaylist(userId);
+    const smashPlaylistId = await createSpotifyPlaylist(userId);
 
     if (!smashPlaylistId) {
       return NextResponse.json(
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const songsUri = songs.map((song) => song.uri);
     // Adding song song to playlist created
-    const addToPlaylist = await addSongsToPlaylist(smashPlaylistId, songsUri);
+    // const addToPlaylist = await addSongsToPlaylist(smashPlaylistId, songsUri);
 
     if (!addToPlaylist) {
       return NextResponse.json(
@@ -76,12 +76,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
       );
     }
 
-    // const data = {
-    //   playlistId: smashPlaylistId,
-    //   refreshToken: refresh_token,
-    //   spotifyId: userId,
-    // };
+    const data = {
+      playlistId: smashPlaylistId,
+      refreshToken: refresh_token,
+      spotifyId: userId,
+      name: display_name
+    };
 
+    // // Create user on database
     // const createUser = await fetch('/api/createUser', {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },

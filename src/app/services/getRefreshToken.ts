@@ -18,4 +18,5 @@ export const getRefreshToken = async () => {
   const accesstoken = res.json();
   // update access cookie
   console.log(accesstoken);
+  return accesstoken;
 };

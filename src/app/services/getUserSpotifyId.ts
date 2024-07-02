@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 
-export const getUserId = async () => {
+export const getUserSpotifyId = async () => {
   try {
     const spotifyAccessToken = cookies().get('spotifyAccessToken');
 

@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 
-export const createPlaylist = async (userId: string) => {
+export const createSpotifyPlaylist = async (userId: string) => {
   try {
     const spotifyAccessToken = cookies().get('spotifyAccessToken');
 
@@ -32,9 +32,9 @@ export const createPlaylist = async (userId: string) => {
       throw Error('failed to create playlitst on spotify');
     }
 
-    const createPlaylist = await req.json();
+    const createSpotifyPlaylist = await req.json();
 
-    const { id: playlistId } = createPlaylist;
+    const { id: playlistId } = createSpotifyPlaylist;
 
     return playlistId;
   } catch (error) {
